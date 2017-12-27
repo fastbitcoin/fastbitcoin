@@ -1,0 +1,2 @@
+# fastbitcoin
+fast bitcoin fork
