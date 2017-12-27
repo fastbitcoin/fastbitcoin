@@ -1,0 +1,43 @@
+{
+  "timestamp": "2017-07-26T10:08:36",
+  "market_assets": [],
+  "delegates": [{
+      "name": "init0",
+      "owner": "17F4qUgdXkhD5YUaJf1qjXmwb8giJ4Jw9XnSFVeTBJa9wLRBbAB"
+    },{
+      "name": "init1",
+      "owner": "163jYKnjcTRJssXMhFVdrzadvPhH1ndHxUFDu8nogfdScj4GBWx"
+    },{
+      "name": "init2",
+      "owner": "17zfzapT5UTvZRMdgXmnCuk1zUNSvhMYUFDMSXM1oFFahHXuooM"
+    },{
+      "name": "init3",
+      "owner": "176ydoHQjbyeeLGiLMVfgQiJRgo5oG93LXJ3vZ5PNJeUwfCSmwT"
+    },{
+      "name": "init4",
+      "owner": "15HxcsLgRoAC7rhu3AqZWbb7hzx3aU9b9VGSGvoS4F9mPYAc8S2"
+    },{
+      "name": "init5",
+      "owner": "15wBPhMsaTUtCUyXmUxBnzxnmiRdwkaAwC7R96m8z5LeYU6ZuPU"
+    },{
+      "name": "init6",
+      "owner": "18dZ3dh5DiuZn3YcqGRS49SQrXqjbVpjTp9yN9vSuGY6rFyur5c"
+    },{
+      "name": "init7",
+      "owner": "17JQKnDDc8KtxUCacRRHsjAvgiHFEn8saTV6m6tGm5SMNVs8iEo"
+    },{
+      "name": "init8",
+      "owner": "16FdqWzxnxVcqQMU8oeuSoUszH2UvtSo5LrradJEc5oDJgVGpGj"
+    }
+  ],
+  "initial_balances": [{
+      "raw_address": "1MNVT8FJwALYzE2z6ikQdufGx3SmZL2urD",
+      "balance": "2100000000000000"
+    }
+  ],
+  "sharedrop_balances": {
+    "start_time": "1970-01-01T00:00:00",
+    "duration_days": 0,
+    "vesting_balances": []
+  }
+}

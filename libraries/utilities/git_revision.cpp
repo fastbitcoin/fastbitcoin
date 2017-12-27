@@ -1,0 +1,14 @@
+#include <stdint.h>
+#include <fbtc/utilities/git_revision.hpp>
+
+#define FBTC_GIT_REVISION_SHA ""
+#define FBTC_GIT_REVISION_UNIX_TIMESTAMP 0
+#define FBTC_GIT_REVISION_DESCRIPTION ""
+
+namespace fbtc { namespace utilities {
+
+const char* const git_revision_sha = FBTC_GIT_REVISION_SHA;
+const uint32_t git_revision_unix_timestamp = FBTC_GIT_REVISION_UNIX_TIMESTAMP;
+const char* const git_revision_description = FBTC_GIT_REVISION_DESCRIPTION;
+
+} } // end namespace fbtc::utilities
