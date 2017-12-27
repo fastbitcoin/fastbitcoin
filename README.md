@@ -4,6 +4,9 @@ This is the repository for [fbtc.pro](http://fbtc.pro). As the Fast Bitcoin comm
 ## Build
 [Windows Build](https://github.com/fastbitcoin/fastbitcoin/wiki/Fastbitcoin-Windows-Build-Instructions)
 
+[Ubuntu build](https://github.com/fastbitcoin/fastbitcoin/wiki/Fastbitcoin-Ubuntu-Build-Instructions)
+
+
 Contributions
 If you want to submit updates to the website make sure you are editing index.html.erb. This is the template used to generate all translated html files via rake translations:build.
 
