@@ -14,4 +14,4 @@ Fast bitcoin has given the world a more efficient trading platform.On the basis 
 All Bitcoin holders as of block 5001225 are now owners of Fast Bitcoin. All Bitcoiners are welcome to join the Fast Bitcoin community as we move forward in creating sound money accessible to the whole world.
 
 ## License
-bitcoincash.org is released under the terms of the MIT license. See COPYING for more information or see https://opensource.org/licenses/MIT.
+fbtc.pro is released under the terms of the MIT license. See COPYING for more information or see https://github.com/fastbitcoin/fastbitcoin/blob/master/LICENSE.
