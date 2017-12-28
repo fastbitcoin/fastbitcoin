@@ -542,16 +542,83 @@ namespace fbtc { namespace blockchain {
        return prev_state->lookup<balance_record>( id );
    }
 
+   unordered_set<balance_record> pending_chain_state::balance_id_lookup_by_address(const address& addr) const
+   {
+	   unordered_set<balance_record> result;
+	   const auto iter = _address_to_balance_id.find(addr);
+	   bool have = false;
+	   if (iter != _address_to_balance_id.end())
+	   {
+		   have = true;
+		   for (auto& id : iter->second)
+		   {
+			   result.emplace(*balance_lookup_by_id(id));
+		   }
+		   
+	   };
+	   const chain_interface_ptr prev_state = _prev_state.lock();
+	   if (!prev_state) return result;
+	   
+	   auto addr_ids = prev_state->balance_id_lookup_by_address(addr);
+	   if (addr_ids.size()>0)
+	   {
+		   for (auto& bal : addr_ids)
+		   {
+			   if (_balance_id_remove.count(bal.id()) > 0)
+			   {
+				   continue;
+			   }
+			   if (have && iter->second.count(bal.id()) > 0)
+			   {
+				   continue;
+			   }
+			   result.emplace(bal);
+		   }
+		   
+	   }
+	   return result;
+   }
+
    void pending_chain_state::balance_insert_into_id_map( const balance_id_type& id, const balance_record& record )
    {
        _balance_id_remove.erase( id );
        _balance_id_to_record[ id ] = record;
+	   for (auto owner : record.owners())
+	   {
+		   auto iter = _address_to_balance_id.find(owner);
+		   if (iter != _address_to_balance_id.end())
+		   {
+			   _address_to_balance_id[owner].emplace(id);
+		   }
+		   else
+		   {
+			   std::unordered_set<balance_id_type> temp_set;
+			   temp_set.emplace(id);
+			   _address_to_balance_id[owner] = temp_set;
+		   }
+		   
+	   }
+	   
    }
 
    void pending_chain_state::balance_erase_from_id_map( const balance_id_type& id )
    {
+	   auto record = _balance_id_to_record[id];
+	   for (auto owner : record.owners())
+	   {
+		   auto iter = _address_to_balance_id.find(owner);
+		   if (iter != _address_to_balance_id.end())
+		   {
+			   _address_to_balance_id[owner].erase(id);
+			   if (_address_to_balance_id[owner].empty())
+			   {
+				   _address_to_balance_id.erase(owner);
+			   }
+		   }
+	   }
        _balance_id_to_record.erase( id );
        _balance_id_remove.insert( id );
+	   
    }
 
    otransaction_record pending_chain_state::transaction_lookup_by_id( const transaction_id_type& id )const

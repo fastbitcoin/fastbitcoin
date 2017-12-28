@@ -11,25 +11,31 @@ void detail::wallet_impl::scan_balances_experimental()
 { try {
     const auto pending_state = _blockchain->get_pending_state();
 
-    const auto scan_balance = [&]( const balance_record& record )
+	const auto scan_balance_by_address = [&](const address & addr)
     {
-        const balance_id_type id = record.id();
-        const obalance_record pending_record = pending_state->get_balance_record( id );
-        if( !pending_record.valid() ) return;
-
-        const set<address>& owners = pending_record->owners();
+		const auto balances = pending_state->get_balances_by_address(addr);
+		if (balances.size()==0)
+			return;
+		for (auto one_record : balances)
+		{
+			const set<address>& owners = one_record.owners();
         for( const address& owner : owners )
         {
             const owallet_key_record key_record = _wallet_db.lookup_key( owner );
             if( !key_record.valid() || !key_record->has_private_key() ) continue;
 
-            _balance_records[ id ] = std::move( *pending_record );
+				_balance_records[one_record.id()] = std::move(one_record);
             break;
         }
+		}
     };
 
     _balance_records.clear();
-    _blockchain->scan_balances( scan_balance );
+	auto keys = _wallet_db.get_keys();
+	for (auto& one_key : keys)
+	{
+		scan_balance_by_address(one_key.first);
+	}
     _dirty_balances = false;
 } FC_CAPTURE_AND_RETHROW() }
 

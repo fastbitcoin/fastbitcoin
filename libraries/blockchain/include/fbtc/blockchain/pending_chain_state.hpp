@@ -94,6 +94,7 @@ namespace fbtc { namespace blockchain {
          unordered_set<slate_id_type>                                       _slate_id_remove;
 
          unordered_map<balance_id_type, balance_record>                     _balance_id_to_record;
+		 unordered_map<address, unordered_set<balance_id_type>>             _address_to_balance_id;
          unordered_set<balance_id_type>                                     _balance_id_remove;
 
          unordered_map<transaction_id_type, transaction_record>             _transaction_id_to_record;
@@ -159,6 +160,7 @@ namespace fbtc { namespace blockchain {
          virtual void slate_erase_from_id_map( const slate_id_type )override;
 
          virtual obalance_record balance_lookup_by_id( const balance_id_type& )const override;
+		 virtual unordered_set<balance_record> balance_id_lookup_by_address(const address&)const override;
          virtual void balance_insert_into_id_map( const balance_id_type&, const balance_record& )override;
          virtual void balance_erase_from_id_map( const balance_id_type& )override;
 
@@ -208,6 +210,7 @@ FC_REFLECT( fbtc::blockchain::pending_chain_state,
             (_slate_id_to_record)
             (_slate_id_remove)
             (_balance_id_to_record)
+			(_address_to_balance_id)
             (_balance_id_remove)
             (_transaction_id_to_record)
             (_transaction_id_remove)

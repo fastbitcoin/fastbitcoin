@@ -261,6 +261,7 @@ namespace fbtc { namespace blockchain {
                                                                   uint32_t skip_count,
                                                                   uint32_t limit,
                                                                   const address& owner );
+		 unordered_set<balance_record> balance_id_lookup_by_address(const address&)const;
 
          void                               generate_snapshot( const fc::path& filename )const;
          void                               graphene_snapshot( const string& filename, const set<string>& whitelist )const;
@@ -321,6 +322,7 @@ namespace fbtc { namespace blockchain {
          virtual void slate_erase_from_id_map( const slate_id_type )override;
 
          virtual obalance_record balance_lookup_by_id( const balance_id_type& )const override;
+		 
          virtual void balance_insert_into_id_map( const balance_id_type&, const balance_record& )override;
          virtual void balance_erase_from_id_map( const balance_id_type& )override;
 

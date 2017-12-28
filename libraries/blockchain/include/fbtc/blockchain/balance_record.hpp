@@ -50,7 +50,7 @@ namespace fbtc { namespace blockchain {
       variant                    meta_data; // extra meta data about every balance
 
       static balance_id_type get_multisig_balance_id( asset_id_type asset_id, uint32_t m, const vector<address>& addrs );
-
+	  friend bool operator == (const balance_record& a, const balance_record& b) { return a.id() == b.id(); }
       void sanity_check( const chain_interface& )const;
       static obalance_record lookup( const chain_interface&, const balance_id_type& );
       static void store( chain_interface&, const balance_id_type&, const balance_record& );
@@ -64,9 +64,25 @@ namespace fbtc { namespace blockchain {
       virtual obalance_record balance_lookup_by_id( const balance_id_type& )const = 0;
       virtual void balance_insert_into_id_map( const balance_id_type&, const balance_record& ) = 0;
       virtual void balance_erase_from_id_map( const balance_id_type& ) = 0;
+   public:
+	   virtual unordered_set<balance_record> balance_id_lookup_by_address(const address&)const = 0;
    };
 
 } } // fbtc::blockchain
+namespace std
+{
+	template<>
+	struct hash < fbtc::blockchain::balance_record >
+	{
+	public:
+		size_t operator()(const fbtc::blockchain::balance_record &a) const
+		{
+			size_t s;
+			memcpy((char*)&s, &a.id().addr.data[sizeof(a) - sizeof(s)], sizeof(s));
+			return s;
+		}
+	};
 
+}
 FC_REFLECT( fbtc::blockchain::snapshot_record, (original_address)(original_balance) )
 FC_REFLECT( fbtc::blockchain::balance_record, (condition)(balance)(restricted_owner)(snapshot_info)(deposit_date)(last_update)(meta_data) )

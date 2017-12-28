@@ -9,6 +9,7 @@
 
 #include <fc/container/flat_fwd.hpp>
 #include <fc/container/deque_fwd.hpp>
+#include <unordered_set>
 
 namespace fc {
   class value;
@@ -68,6 +69,13 @@ namespace fc {
          static std::string n = std::string("std::map<") + get_typename<K>::name() + ","+get_typename<V>::name()+">"; 
          return n.c_str();  
      } 
+  };
+  template<typename K> struct get_typename<std::unordered_set<K>>
+  {
+	  static const char* name() {
+		  static std::string n = std::string("std::unordered_set<") + get_typename<K>::name()+  ">";
+		  return n.c_str();
+	  }
   };
 
   struct signed_int;

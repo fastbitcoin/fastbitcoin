@@ -376,6 +376,13 @@ namespace fbtc { namespace blockchain {
    { try {
        return lookup<balance_record>( id );
    } FC_CAPTURE_AND_RETHROW( (id) ) }
+   unordered_set<balance_record> chain_interface::get_balances_by_address(const address& addr)const
+   {
+	   try {
+		   return balance_id_lookup_by_address(addr);
+	   } FC_CAPTURE_AND_RETHROW((addr))
+   }
+
 
    void chain_interface::store_balance_record( const balance_record& record )
    { try {

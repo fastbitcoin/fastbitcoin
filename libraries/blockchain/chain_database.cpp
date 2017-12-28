@@ -173,8 +173,9 @@ namespace fbtc { namespace blockchain {
 
           _slate_id_to_record.open( data_dir / "index/slate_id_to_record" );
 
-          _balance_id_to_record.open( data_dir / "index/balance_id_to_record" ,true,1024*1024*1024);
+          _balance_id_to_record.open( data_dir / "index/balance_id_to_record" ,true,size_t(2*1024)*size_t(1024*1024));
 
+		  _address_to_balance_id.open(data_dir / "index/address_to_balance_id");
           _transaction_id_to_record.open( data_dir / "index/transaction_id_to_record" );
           _address_to_transaction_ids.open( data_dir / "index/address_to_transaction_ids" );
 
@@ -1758,6 +1759,7 @@ namespace fbtc { namespace blockchain {
       my->_slate_id_to_record.close();
 
       my->_balance_id_to_record.close();
+	  my->_address_to_balance_id.close();
 
       my->_transaction_id_to_record.close();
       my->_address_to_transaction_ids.close();
@@ -4202,14 +4204,73 @@ namespace fbtc { namespace blockchain {
        return my->_balance_id_to_record.fetch_optional(id);
    }
 
+    unordered_set<balance_record> chain_database::balance_id_lookup_by_address(const address& adrr)const
+   {
+		auto temp_ids = my->_address_to_balance_id.fetch_optional(adrr);
+		if (temp_ids.valid())
+		{
+			unordered_set<balance_record> result;
+			for (auto id : *temp_ids)
+			{
+				
+				result.emplace(*balance_lookup_by_id(id));
+			}
+			return result;
+		}
+		else
+		{
+			return unordered_set<balance_record>();
+		}
+   }
+
    void chain_database::balance_insert_into_id_map( const balance_id_type& id, const balance_record& record )
    {
        my->_balance_id_to_record.store( id, record );
+	   for (auto owner : record.owners())
+	   {
+		   auto obal_set =  my->_address_to_balance_id.fetch_optional(owner);
+		   if (obal_set.valid())
+		   {
+			   obal_set->emplace(id);
+			   my->_address_to_balance_id.store(owner, *obal_set);
+		   }
+		   else
+		   {
+			   std::unordered_set<balance_id_type> temp_set;
+			   temp_set.emplace(id);
+			   my->_address_to_balance_id.store(owner, temp_set);
+		   }
+	   }
+	  
    }
 
    void chain_database::balance_erase_from_id_map( const balance_id_type& id )
    {
+	   auto obalance_record = my->_balance_id_to_record.fetch_optional(id);
+       
+	   if (obalance_record.valid())
+	   {
+		   for (auto owner : obalance_record->owners())
+		   {
+			   auto obal_set = my->_address_to_balance_id.fetch_optional(owner);
+			   if (obal_set.valid())
+			   {
+				   obal_set->erase(id);
+				   if (!obal_set->empty())
+				   {
+					   my->_address_to_balance_id.store(owner, *obal_set);
+				   }
+				   else
+				   {
+					   my->_address_to_balance_id.remove(owner);
+				   }
+
+				   
+			   }
+		   }
+	   }
        my->_balance_id_to_record.remove( id );
+	   
    }
 
    otransaction_record chain_database::transaction_lookup_by_id( const transaction_id_type& id )const

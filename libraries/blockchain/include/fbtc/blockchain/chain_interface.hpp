@@ -141,6 +141,7 @@ namespace fbtc { namespace blockchain {
          oslate_record                      get_slate_record( const slate_id_type id )const;
          void                               store_slate_record( const slate_record& record );
 
+		 unordered_set<balance_record>		get_balances_by_address(const address& addr)const;
          obalance_record                    get_balance_record( const balance_id_type& id )const;
          void                               store_balance_record( const balance_record& record );
 

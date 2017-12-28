@@ -155,6 +155,7 @@ namespace fbtc { namespace blockchain {
             fbtc::db::fast_level_map<slate_id_type, slate_record>                        _slate_id_to_record;
 
             fbtc::db::level_map<balance_id_type, balance_record>						 _balance_id_to_record;
+			fbtc::db::level_map<address, unordered_set<balance_id_type>>				 _address_to_balance_id;
 
             fbtc::db::level_map<transaction_id_type, transaction_record>                 _transaction_id_to_record;
             set<unique_transaction_key>                                                 _unique_transactions;
