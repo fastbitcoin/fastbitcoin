@@ -986,7 +986,7 @@ namespace detail {
       }
 
       my->scan_accounts();
-      my->scan_balances_experimental();
+      //my->scan_balances_experimental();
    } FC_CAPTURE_AND_RETHROW( (wallet_name) ) }
 
    void wallet::close()
