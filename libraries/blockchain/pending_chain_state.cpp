@@ -552,7 +552,7 @@ namespace fbtc { namespace blockchain {
 		   have = true;
 		   for (auto& id : iter->second)
 		   {
-			   result.emplace(*balance_lookup_by_id(id));
+			   result.emplace(_balance_id_to_record.at(id));
 		   }
 		   
 	   };
@@ -588,7 +588,9 @@ namespace fbtc { namespace blockchain {
 		   auto iter = _address_to_balance_id.find(owner);
 		   if (iter != _address_to_balance_id.end())
 		   {
-			   _address_to_balance_id[owner].emplace(id);
+			   auto temp_ids = _address_to_balance_id[owner];
+			   temp_ids.emplace(id);
+			   _address_to_balance_id[owner] = temp_ids;
 		   }
 		   else
 		   {
@@ -609,10 +611,16 @@ namespace fbtc { namespace blockchain {
 		   auto iter = _address_to_balance_id.find(owner);
 		   if (iter != _address_to_balance_id.end())
 		   {
-			   _address_to_balance_id[owner].erase(id);
+			   auto temp_ids = _address_to_balance_id[owner];
+			   temp_ids.erase(id);
+			   
 			   if (_address_to_balance_id[owner].empty())
 			   {
 				   _address_to_balance_id.erase(owner);
+			   }
+			   else
+			   {
+				   _address_to_balance_id[owner] = temp_ids;
 			   }
 		   }
 	   }
