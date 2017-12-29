@@ -159,8 +159,15 @@ fc::variant_object client_impl::validate_address(const string& address) const
    fc::mutable_variant_object result;
    try
    {
-      fbtc::blockchain::public_key_type test_key(address);
-      result["isvalid"] = true;
+	   if (fbtc::blockchain::address::is_valid(address))
+	   {
+		   result["isvalid"] = true;
+	  }
+	   else
+	   {
+		   result["isvalid"] = false;
+	   }
+      
    }
    catch (const fc::exception&)
    {
