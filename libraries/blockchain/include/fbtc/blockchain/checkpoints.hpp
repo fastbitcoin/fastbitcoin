@@ -5,7 +5,7 @@ namespace fbtc { namespace blockchain {
 
 static std::map<uint32_t, fbtc::blockchain::block_id_type> CHECKPOINT_BLOCKS
 {
-    
+	{ 700, fbtc::blockchain::block_id_type("1b19fca0aa74db6ee03ba23a2db88c0d2e7cb451") }
 };
 
 // Initialized in load_checkpoints()
